@@ -166,13 +166,26 @@ for hla_class in [SD_A, SD_B, SD_C, SD_DQB1, SD_DQA1, SD_DRB1]:
         LIST_ALL.append(hla_class[0][0])
         if (hla_class)[1][1] == 2:
             LIST_ALL.append(hla_class[1][0])
-    elif (hla_class)[0][1] == 3:
+        else:
+            for allele in hla_class:
+                LIST_ALL.append(allele[0])
+    elif (hla_class)[0][1] == 3: # 12 12 12 or 12 12 13 or 12 13 14
         if (hla_class)[1][1] == 3 or (hla_class)[1][1] == 2:
             LIST_ALL.append(hla_class[0][0])
             LIST_ALL.append(hla_class[1][0])
         else:
-            for each in range(N) :
-                LIST_ALL.append(hla_class[each-1][0])
+            for allele in hla_class:
+                LIST_ALL.append(allele[0])
+    elif (hla_class)[0][1] == 2: # 12 12 xx or 12 13 x4
+        if (hla_class)[1][1] == 2:
+            LIST_ALL.append(hla_class[0][0])
+            LIST_ALL.append(hla_class[1][0])
+        else:
+            for allele in hla_class:
+                LIST_ALL.append(allele[0])
+    else:
+        for allele in hla_class:
+            LIST_ALL.append(allele[0])
 
 print(LIST_ALL)
 
