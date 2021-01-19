@@ -13,7 +13,7 @@ ${STARFOLDER}/STAR \
 	--genomeDir ${HG38FOLDER}/ \
         --readFilesIn ${FASTQFOLDER}/${LEFTFQ} ${FASTQFOLDER}/${RIGHTFQ} \
         --readFilesCommand zcat \
-        --outFileNamePrefix ${BAMFOLDER}/${SAMPLE}/${SAMPLE}_ \
+        --outFileNamePrefix ${BAMFOLDER}/${SAMPLE}_ \
         --outSAMtype BAM SortedByCoordinate \
         --twopassMode Basic \
         --outSAMattributes NH HI AS nM XS 
