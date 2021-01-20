@@ -13,6 +13,7 @@ BAMFOLDER=$1
 GTF=/gnome/genome_database/ensembl/Homo_sapiens.GRCh38.98.convert.gtf
 OUTFOLDER=$2
 SAMPLE=$3
+DIR=$(dirname "${BASH_SOURCE[0]}")
 
 ${FEATURECOUNTS}/featureCounts \
         -p \
@@ -25,3 +26,5 @@ ${FEATURECOUNTS}/featureCounts \
         -a ${GTF} \
         -o ${OUTFOLDER}/${SAMPLE}.readcounts.featurecounts.txt \
         ${BAMFOLDER}/${SAMPLE}_Aligned.sortedByCoord.out.bam 
+
+${DIR}/process_counts.py -f ${OUTFOLDER}/${SAMPLE}.readcounts.featurecounts.txt -o ${OUTFOLDER}/${SAMPLE}
