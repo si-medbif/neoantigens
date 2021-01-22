@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Mutect2 can be run on selected parts of the genome by using the option -L with a bed-file
+# -L /Hg38_dir/agilent_sureselect_V5_UTR_hg38_clean.bed \
+
 BAMFOLDER_TUMOR=$1
 BAMFOLDER_NORMAL=$2
 VCFFOLDER=$3
@@ -22,7 +25,9 @@ docker run --rm -v ${BAMFOLDER_TUMOR}:/bam_tumor \
         -normal ${NORMAL} \
 	-pon /GATKtutorial/1000g_pon.hg38.vcf.gz \
         --germline-resource /GATKtutorial/af-only-gnomad.hg38.vcf.gz \
+	-L /Hg38_dir/agilent_sureselect_V5_UTR_hg38_clean.bed \
         --af-of-alleles-not-in-resource 0.0000025 \
+	--ignore-itr-artifacts \
         -O /vcf_folder/${TUMOR}_m2.vcf.gz
 
 docker run --rm -v ${DIR_GATK}:/data \

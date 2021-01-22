@@ -54,13 +54,10 @@ for findex, infile in enumerate(files):
         for line in fin:
             l = line.strip().split()
             Geneid, Chr, Start, End, Strand, Length, *count = l
-            geneid = db.get(Geneid, 'NAN')
-            if geneid == 'NAN':
-                continue
-            if geneid not in gene_db:
-                gene_db[geneid] = int(Length)
+            if Geneid not in gene_db:
+                gene_db[Geneid] = int(Length)
             for sample, s in zip(samples, count):
-                counts[sample][geneid] = int(s)
+                counts[sample][Geneid] = int(s)
 print('Finished reading counts')
 
 num_samples = len(counts)
@@ -72,12 +69,13 @@ with open(outfile2, 'w') as fout:
     outsamples = []
     for sample in samples:
         outsamples.append(sample.split('/')[-1].rsplit('_',1)[0])
-    fout.write('geneid\tlength\t{}\n'.format('\t'.join(outsamples)))
-    for gene in gene_db:
-        fout.write('{}\t{}'.format(gene, gene_db[gene]))
+    fout.write('geneid\tgene\tlength\t{}\n'.format('\t'.join(outsamples)))
+    for geneid in gene_db:
+        gene = db.get(geneid, 'NAN')
+        fout.write('{}\t{}\t{}'.format(geneid, gene, gene_db[geneid]))
         for sample in samples:
             try:
-                fout.write('\t{}'.format(counts[sample][gene]))
+                fout.write('\t{}'.format(counts[sample][geneid]))
             except KeyError:
                 fout.write('\tNA')
         fout.write('\n')
@@ -86,9 +84,9 @@ print('Finished writing raw counts')
 # Calculate TPM and write data for all samples to file
 rawdf = pd.read_csv(outfile2, header=0, sep='\t', comment='#')
 columns = rawdf.columns
-tpmdf = rawdf.iloc[:,[0, 1]]
-for col_ind in range(2, len(columns)):
-    df1 = 1000 * rawdf.iloc[:,col_ind] / rawdf.iloc[:,1]
+tpmdf = rawdf.iloc[:,[0, 1, 2]]
+for col_ind in range(3, len(columns)):
+    df1 = 1000 * rawdf.iloc[:,col_ind] / rawdf.iloc[:,2]
     df1 = 1000000 * df1 / df1.sum()
     tpmdf = pd.concat([tpmdf, df1], axis=1)
 

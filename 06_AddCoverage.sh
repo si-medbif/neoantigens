@@ -9,8 +9,10 @@ set -e
 
 DIR_BAM=$1
 DIR_VCF=$2
+DIR_COUNT=$3
 DIR_HG38=/gnome/genome_database/gatk_bundle/hg38bundle
-SAMPLE=$3
+SAMPLE=$4
+RNASAMPLE=$5
 
 # Creates the *readcount_snv.tsv, and *readcount_indel.tsv from RNA BAM-files.
 docker run --rm -v ${DIR_BAM}:/bam \
@@ -21,20 +23,20 @@ docker run --rm -v ${DIR_BAM}:/bam \
         /vcf/${SAMPLE}_m2_vep_filtered.vcf \
         ${SAMPLE} \
         /Hg38_dir/Homo_sapiens_assembly38.fasta \
-        /bam/${SAMPLE}_Aligned.sortedByCoord.out.bam \
+        /bam/${RNASAMPLE}_Aligned.sortedByCoord.out.bam \
         /vcf/
 
 # Add gene expression data to the vcf files
-docker run --rm -v ${DIR_BAM}:/bam \
+docker run --rm -v ${DIR_COUNT}:/count \
 	-v ${DIR_VCF}:/vcf \
         griffithlab/vatools \
         vcf-expression-annotator \
         /vcf/${SAMPLE}_m2_vep_filtered.vcf \
-        /bam/${SAMPLE}_readcounts.featurecounts.txt \
+        /count/${RNASAMPLE}.tpm.tsv \
         custom \
         gene \
-        --id-column gene \
-        --expression-column ${SAMPLE} \
+        --id-column geneid \
+        --expression-column ${RNASAMPLE} \
         -s ${SAMPLE}
 
 # Add RNA read counts to the vcf files

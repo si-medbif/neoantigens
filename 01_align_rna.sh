@@ -17,3 +17,4 @@ ${STARFOLDER}/STAR \
         --outSAMtype BAM SortedByCoordinate \
         --twopassMode Basic \
         --outSAMattributes NH HI AS nM XS 
+samtools index ${BAMFOLDER}/${SAMPLE}_Aligned.sortedByCoord.out.bam
