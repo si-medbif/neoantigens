@@ -7,20 +7,19 @@
 # although runtime will increase.
 
 DIR_VCF=$1
-SAMPLE=$2
-HLA=$3
-
-mkdir -p ${DIR_VCF}/${SAMPLE}/pvac
+DIR_PVAC=$2
+SAMPLE=$3
+HLA=$4
 
 docker run --rm -v ${DIR_VCF}:/vcf \
-       -v ${DIR_VCF}/${SAMPLE}/pvac:/output_dir \
+       -v ${DIR_PVAC}:/pvac \
        griffithlab/pvactools:1.5.4 \
 	pvacseq run \
-       /vcf/${sample}_m2_vep_filtered.vcf \
+       /vcf/${SAMPLE}_m2_vep_filtered.vcf \
        -t 4 \
        --iedb-install-directory /opt/iedb \
-	${sample} \
+	${SAMPLE} \
 	${HLA} \
 	MHCflurry MHCnuggetsI MHCnuggetsII NNalign NetMHC PickPocket SMM SMMPMBEC SMMalign \
-	/output_dir/ \
+	/pvac/ \
        -e 8,9,10,11,12
