@@ -1,5 +1,7 @@
 #!/bin/bash          
 
+set -euo pipefail
+
 # Default filter values:
 # --normal-cov 5
 # --tdna-cov 10
@@ -10,8 +12,8 @@
 # --expn-val 1
  
 
-SAMPLE=$1
-DIR_PVAC=$2/pvac/MHC_Class_I
+SAMPLE=$2
+DIR_PVAC=$1
 
 docker run --rm -v ${DIR_PVAC}:/Output \
         griffithlab/pvactools:1.5.4 \
